@@ -163,10 +163,20 @@ namespace PetaPoco
 
 			// Work out connection string and provider name
 			var providerName = "System.Data.SqlClient";
+			var connectionString = "";
 			if (ConfigurationManager.ConnectionStrings[connectionStringName] != null)
 			{
 				if (!string.IsNullOrEmpty(ConfigurationManager.ConnectionStrings[connectionStringName].ProviderName))
 					providerName = ConfigurationManager.ConnectionStrings[connectionStringName].ProviderName;
+			}
+		    else if (ConfigurationManager.AppSettings[connectionStringName] != null)
+			{
+				//I expect this fork of PetaPoco only ever to be used together with mojoPortal and PostgreSQL.
+				//Pinning the data provider should never be a problem. Nevertheless be a bit defensive about it.
+				//mojoPortal connectionStringName is PostgreSQL(Write)ConnectionString.
+				if (connectionStringName.ToLower().StartsWith("postgresql"))
+					providerName = "Npgsql";
+				connectionString = ConfigurationManager.AppSettings[connectionStringName];
 			}
 			else
 			{
@@ -174,7 +184,7 @@ namespace PetaPoco
 			}
 
 			// Store factory and connection string
-			_connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+			_connectionString = connectionString;
 			_providerName = providerName;
 			CommonConstruct();
 		}
