@@ -1,4 +1,6 @@
-# PetaPoco #
+# PetaPoco Clone #
+
+This is a clone for an internal project based on mojoPortal using PostgreSQL as backend. This repository is not of general use.
 
 <h2 class="tagline">A tiny ORM-ish thing for your POCOs</h2>
 
